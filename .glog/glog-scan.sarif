@@ -1,0 +1,109 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Glog.AI",
+          "organization": "Glog.AI",
+          "fullName": "Glog, Making software more secure",
+          "version": "1.0.0",
+          "semanticVersion": "1.0.0",
+          "informationUri": "https://www.glog.ai",
+          "rules": [
+            {
+              "id": "glog-cdfa6798-5c47-4013-b121-60215530c19b",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `malloc(numbytes)` function in C++ is used to allocate a block of memory of `numbytes` size. The function returns a pointer to the first byte of the allocated space. If the space is insufficient, allocation fails and returns a NULL pointer. This can lead to a vulnerability if not properly checked, as it can cause a program to crash or behave unexpectedly, leading to potential security risks such as denial of service, code execution, or information disclosure.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, always check the return value of `malloc(numbytes)`. If it returns NULL, the program should handle this error gracefully instead of proceeding with the assumption that the allocation was successful. \n\n## Source Code Fix Recommendation\n\nHere is a simple example of how to properly use `malloc(numbytes)`:\n\n```cpp\n#include <stdlib.h>\n\nchar *buffer = (char *) malloc(numbytes);\nif (buffer == NULL) {\n    // Handle error here, e.g., by exiting the program or by attempting to free up memory and trying again.\n    exit(1);\n}\n\n// Continue with the program, using the allocated memory as needed.\n```\n\n## Library Dependencies\n\nThe `malloc(numbytes)` function is part of the `stdlib.h` library in C++. No additional libraries are needed for this function.\n\n## References\n\n- [CWE-690: Unchecked Return Value to NULL Pointer Dereference](https://cwe.mitre.org/data/definitions/690.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS161085"
+                ]
+              }
+            }
+          ],
+          "language": "en-US",
+          "contents": [
+            "localizedData",
+            "nonLocalizedData"
+          ],
+          "isComprehensive": false
+        }
+      },
+      "language": "en-US",
+      "results": [
+        {
+          "ruleId": "glog-cdfa6798-5c47-4013-b121-60215530c19b",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Detected Vulnerability in C Function (malloc)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "other_libs/cpp_wilson_dslash/include/allocate.h"
+                },
+                "region": {
+                  "startLine": 33,
+                  "startColumn": 21,
+                  "endLine": 33,
+                  "endColumn": 37,
+                  "charOffset": 761,
+                  "charLength": 16,
+                  "snippet": {
+                    "text": "malloc(numbytes)",
+                    "rendered": {
+                      "text": "malloc(numbytes)",
+                      "markdown": "`malloc(numbytes)`"
+                    }
+                  },
+                  "sourceLanguage": "c"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "If the value provided to malloc is the result of unsafe integer math, it can result in an exploitable condition. "
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "other_libs/cpp_wilson_dslash/include/allocate.h"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 761,
+                        "charLength": 16
+                      },
+                      "insertedContent": {
+                        "text": "calloc(<number of elements>, <size of each element>)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        }
+      ],
+      "newlineSequences": [
+        "\r\n",
+        "\n"
+      ]
+    }
+  ]
+}
